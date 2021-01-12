@@ -1,24 +1,14 @@
-# vk-gifs
+# vk gifs
 
-## Project setup
-```
-npm install
-```
+## Link / Ссылка
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+https://vk-gifs.moeta.moe/gallery
 
-### Compiles and minifies for production
-```
-npm run build
-```
+I want to keep repo clear (don't want dist folder here), so I deployed it on vercel. I used my own domain because vk blocks redirects to `*.vercel.app` for some reason.
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Motivation
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+VK is a russian social where you also can save staff like gifs. Because on the actual page it looks awful (gifs are small and arranged in a one column), I once made this app for myself.
+Then I decide to make it better and to try out vue 3.
+I wanted to try new `<script setup>` syntax, then also adopeted tailwind and vite.
+
