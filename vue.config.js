@@ -18,9 +18,6 @@ module.exports =  {
     },
   },
   configureWebpack: {
-  //   plugins: [
-  //     new BundleAnalyzerPlugin(),
-  //   ],
     resolve: {
       alias: {
         // vite uses /@/
