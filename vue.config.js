@@ -1,9 +1,9 @@
 const path = require('path')
 
 module.exports =  {
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/vk-gifs/'
-    : '/',
+  // publicPath: process.env.NODE_ENV === 'production'
+  //   ? '/vk-gifs/'
+  //   : '/',
   css: {
     loaderOptions: {
       scss: {
