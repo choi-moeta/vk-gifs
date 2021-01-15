@@ -27,17 +27,17 @@ import { computed, onMounted } from 'vue'
 
 const store = useStore()
 
-const columnsCount = computed(() => store.state.settings.columnsCount)
+const columnCount = computed(() => store.state.settings.columnCount)
 
 const gifs = computed(() => store.state.gifs?.items || [])
 const columns = computed<Gif[][]>(() => {
   if (!gifs.value.length) return []
 
-  let count = columnsCount.value
-  let columns: Gif[][] = new Array(columnsCount.value).fill(0).map(e => [])
+  let count = columnCount.value
+  let columns: Gif[][] = new Array(columnCount.value).fill(0).map(e => [])
 
   for (let i = 0; i < gifs.value.length; i++) {
-    columns[i % columnsCount.value].push(gifs.value[i])
+    columns[i % columnCount.value].push(gifs.value[i])
   }
 
   return columns

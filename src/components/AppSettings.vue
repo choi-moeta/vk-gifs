@@ -1,9 +1,9 @@
 <template>
   <div class='grid items-center px-4 mx-auto mt-12 settings w-max gap-y-4 gap-x-8'>
-    <label class='settings__label' for='columnsCount'>column count</label>
+    <label class='settings__label' for='columnCount'>column count</label>
     <input
-      id='columnsCount'
-      v-model='columnsCount'
+      id='columnCount'
+      v-model='columnCount'
       class='input dark:input-dark'
       type='number'
     >
@@ -81,9 +81,9 @@ const setTheme = (type: themeTypes) => {
   currentTheme.value = getCurrent()
 }
 
-const columnsCount = computed({
-  set: value => store.commit(MutationType.setSettingsColumnsCount, Number(value)),
-  get: () => store.state.settings.columnsCount,
+const columnCount = computed({
+  set: value => store.commit(MutationType.setSettingsColumnCount, Number(value)),
+  get: () => store.state.settings.columnCount,
 })
 const columnWidth = computed({
   set: value => store.commit(MutationType.setSettingsColumnWidth, Number(value)),

@@ -1,3 +1,4 @@
+import { api } from '@/config'
 import store from '/@/store'
 import { jsonp } from '/@/utils'
 
@@ -31,7 +32,7 @@ export type ResponseVK = {
   }]
 }
 
-export const fetchGifs = (count = 2000, offset = 0) => {
+export const fetchGifs = async (count = 2000, offset = 0) => {
   const user = store.state.user
   if (!user) {
     return null
@@ -39,3 +40,5 @@ export const fetchGifs = (count = 2000, offset = 0) => {
   const link = `https://api.vk.com/method/docs.get?count=${count}&v=5.52&type=3&owner_id=${user.id}&access_token=${user.accessToken}&offset=${offset}`
   return jsonp(link).then((r: any) => r.response) as Promise<ResponseVK>
 }
+
+export const getAuthLink = (origin = window.location.origin) => `https://oauth.vk.com/authorize?client_id=${api.vk.clientId}&redirect_uri=${origin}${api.redirectUri}&scope=docs&response_type=token`

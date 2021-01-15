@@ -1,8 +1,13 @@
+import storage from '/@/localStorage';
 import { MutationTree } from 'vuex'
 import { Gif, State, User } from './state'
+import * as config from '/@/config'
+
+const storageKeys = config.storageKeys
+const storeDefaults = config.store.defaults
 
 export enum MutationType {
-  clearAll = 'clearAll',
+  removeAll = 'remove_all',
   setUser = 'set_user',
   removeUser = 'remove_user',
   setGifs = 'set_gifs',
@@ -10,14 +15,15 @@ export enum MutationType {
   setGifsCount = 'set_gifs_count',
   setGifsOffset = 'set_gifs_offset',
   incGifsOffset = 'inc_gifs_offset',
-  setSettingsColumnWidth = 'set_settings_column_width',
-  setSettingsFirstBatchCount = 'set_settings_first_batch_count',
+  setSettingsColumnMaxWidth = 'set_settings_column_max_width',
+  setSettingsColumnMinWidth = 'set_settings_column_min_width',
+  setSettingsFirstFetchCount = 'set_settings_first_batch_count',
   setSettingsFetchCount = 'set_settings_fetch_count',
-  setSettingsColumnsCount = 'setSettingsColumnsCount',
+  setSettingsColumnCount = 'setSettingsColumnCount',
 }
 
 export type Mutations = {
-  [MutationType.clearAll](state: State): void;
+  [MutationType.removeAll](state: State): void;
   [MutationType.setUser](state: State, user: User): void;
   [MutationType.removeUser](state: State): void;
   [MutationType.setGifs](state: State, gifs: Gif[]): void;
@@ -25,69 +31,86 @@ export type Mutations = {
   [MutationType.setGifsCount](state: State, count: number): void;
   [MutationType.setGifsOffset](state: State, offset: number): void;
   [MutationType.incGifsOffset](state: State, offset: number): void;
-  [MutationType.setSettingsColumnsCount](state: State, value: number): void;
-  [MutationType.setSettingsColumnWidth](state: State, value: number): void;
-  [MutationType.setSettingsFirstBatchCount](state: State, value: number): void;
+  [MutationType.setSettingsColumnCount](state: State, value: number): void;
+  [MutationType.setSettingsColumnMaxWidth](state: State, value: number): void;
+  [MutationType.setSettingsColumnMinWidth](state: State, value: number): void;
+  [MutationType.setSettingsFirstFetchCount](state: State, value: number): void;
   [MutationType.setSettingsFetchCount](state: State, value: number): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
-  [MutationType.clearAll](state) {
+  [MutationType.removeAll](state) {
+    storage.clear()
     state.user = null
     state.gifs = null
     state.settings =  {
-      columnsCount: 5,
-      columnWidth: 300,
-      firstBatchCount: 16,
-      fetchCount: 32,
+      columnCount: storeDefaults.settings.columnCount,
+      columnMinWidth: storeDefaults.settings.columnMinWidth,
+      columnMaxWidth: storeDefaults.settings.columnMaxWidth,
+      firstFetchCount: storeDefaults.settings.firstFetchCount,
+      fetchCount: storeDefaults.settings.fetchCount,
     }
   },
   [MutationType.setUser](state, user) {
     state.user = user
-    localStorage.setItem('user.id', String(user.id))
-    localStorage.setItem('user.accessToken', user.accessToken)
-    localStorage.setItem('user.expiresIn', String(user.expiresIn))
+    storage.set(storageKeys.user.id, user.id)
+    storage.set(storageKeys.user.accessToken, user.accessToken)
+    storage.set(storageKeys.user.expiresIn, user.expiresIn)
   },
   [MutationType.removeUser](state) {
     state.user = null
-    localStorage.removeItem('user.id')
-    localStorage.removeItem('user.accessToken')
-    localStorage.removeItem('user.expiresIn')
+    storage.remove(storageKeys.user.id)
+    storage.remove(storageKeys.user.accessToken)
+    storage.remove(storageKeys.user.expiresIn)
   },
   [MutationType.setGifs](state, gifs) {
-    if (state.gifs) state.gifs.items = gifs
-    localStorage.setItem('gifs.items', JSON.stringify(gifs))
+    if (state.gifs) {
+      state.gifs.items = gifs
+      storage.set(storageKeys.gifs.items, gifs)
+    }
   },
   [MutationType.pushGifs](state, gifs) {
-    if (state.gifs) state.gifs.items = [ ...state.gifs.items, ...gifs]
-    localStorage.setItem('gifs.items', JSON.stringify(state.gifs?.items || []))
+    if (state.gifs) {
+      state.gifs.items = [ ...state.gifs.items, ...gifs]
+      storage.set(storageKeys.gifs.items, state.gifs.items)
+    }
   },
   [MutationType.setGifsCount](state, count) {
-    if (state.gifs) state.gifs.count = count
-    localStorage.setItem('gifs.count', String(count))
+    if (state.gifs) {
+      state.gifs.count = count
+      storage.set(storageKeys.gifs.count, count)
+    }
   },
   [MutationType.setGifsOffset](state, offset) {
-    if (state.gifs) state.gifs.offset = offset
-    localStorage.setItem('gifs.offset', String(offset))
+    if (state.gifs) {
+      state.gifs.offset = offset
+      storage.set(storageKeys.gifs.offset, offset)
+    }
   },
   [MutationType.incGifsOffset](state, offset) {
-    if (state.gifs) state.gifs.offset = state.gifs.offset + offset
-    localStorage.setItem('gifs.offset', String(state.gifs?.offset || 0))
+    if (state.gifs) {
+      state.gifs.offset = state.gifs.offset + offset
+      storage.set(storageKeys.gifs.offset, state.gifs.offset)
+    }
   },
-  [MutationType.setSettingsColumnsCount](state: State, value: number) {
-    state.settings.columnsCount = value
-    localStorage.setItem('settings.columnsCount', String(value))
+  [MutationType.setSettingsColumnCount](state: State, value: number) {
+    state.settings.columnCount = value
+    storage.set(storageKeys.settings.columnCount, value)
   },
-  [MutationType.setSettingsColumnWidth](state: State, value: number) {
-    state.settings.columnWidth = value
-    localStorage.setItem('settings.columnWidth', String(value))
+  [MutationType.setSettingsColumnMaxWidth](state: State, value: number) {
+    state.settings.columnMaxWidth = value
+    storage.set(storageKeys.settings.columnMaxWidth, value)
   },
-  [MutationType.setSettingsFirstBatchCount](state: State, value: number) {
-    state.settings.firstBatchCount = value
-    localStorage.setItem('settings.firstBatchCount', String(value))
+  [MutationType.setSettingsColumnMinWidth](state: State, value: number) {
+    state.settings.columnMinWidth = value
+    storage.set(storageKeys.settings.columnMinWidth, value)
+  },
+  [MutationType.setSettingsFirstFetchCount](state: State, value: number) {
+    state.settings.firstFetchCount = value
+    storage.set(storageKeys.settings.firstFetchCount, value)
   },
   [MutationType.setSettingsFetchCount](state: State, value: number) {
     state.settings.fetchCount = value
-    localStorage.setItem('settings.fetchCount', String(value))
+    storage.set(storageKeys.settings.fetchCount, value)
   },
 }
