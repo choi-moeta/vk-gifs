@@ -1,4 +1,4 @@
-import { api } from '@/config'
+import { api } from '/@/config'
 import store from '/@/store'
 import { jsonp } from '/@/utils'
 
