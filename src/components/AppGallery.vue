@@ -44,7 +44,7 @@ const columns = computed<Gif[][]>(() => {
 })
 
 onMounted(async () => {
-  await store.dispatch(ActionTypes.fetchGifsFirstBatch)
+  await store.dispatch(ActionTypes.fetchGifsFirstFetch)
   // await store.dispatch(ActionTypes.fetchGifs)
 
   let isFetching = false

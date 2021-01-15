@@ -14,10 +14,10 @@
       class='input dark:input-dark'
       type='number'
     > -->
-    <label class='settings__label' for='firstBatchCount'>first load count</label>
+    <label class='settings__label' for='firstFetchCount'>first load count</label>
     <input
-      id='firstBatchCount'
-      v-model='firstBatchCount'
+      id='firstFetchCount'
+      v-model='firstFetchCount'
       class='input dark:input-dark'
       type='number'
     >
@@ -89,9 +89,9 @@ const columnWidth = computed({
   set: value => store.commit(MutationType.setSettingsColumnWidth, Number(value)),
   get: () => store.state.settings.columnWidth,
 })
-const firstBatchCount = computed({
-  set: value => store.commit(MutationType.setSettingsFirstBatchCount, Number(value)),
-  get: () => store.state.settings.firstBatchCount,
+const firstFetchCount = computed({
+  set: value => store.commit(MutationType.setSettingsFirstFetchCount, Number(value)),
+  get: () => store.state.settings.firstFetchCount,
 })
 const fetchCount = computed({
   set: value => store.commit(MutationType.setSettingsFetchCount, Number(value)),

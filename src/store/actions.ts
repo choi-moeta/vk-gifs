@@ -7,7 +7,7 @@ import { Gif, State, User } from './state'
 export enum ActionTypes {
   auth = 'auth',
   logout = 'logout',
-  fetchGifsFirstBatch = 'fetch_gifs_first_batch',
+  fetchGifsFirstFetch = 'fetch_gifs_first_batch',
   fetchGifs = 'fetch_gifs',
 }
 
@@ -21,7 +21,7 @@ type ActionAugments = Omit<ActionContext<State, State>, 'commit'> & {
 export type Actions = {
   [ActionTypes.auth](context: ActionAugments, user: User): void;
   [ActionTypes.logout](context: ActionAugments): void;
-  [ActionTypes.fetchGifsFirstBatch](context: ActionAugments): void;
+  [ActionTypes.fetchGifsFirstFetch](context: ActionAugments): void;
   [ActionTypes.fetchGifs](context: ActionAugments): void;
 }
 
@@ -30,12 +30,12 @@ export const actions: ActionTree<State, State> & Actions = {
     commit(MutationType.setUser, user)
   },
   async [ActionTypes.logout]({ commit }) {
-    commit(MutationType.clearAll)
+    commit(MutationType.removeAll)
   },
-  async [ActionTypes.fetchGifsFirstBatch]({ state, commit }) {
+  async [ActionTypes.fetchGifsFirstFetch]({ state, commit }) {
     if (state.gifs?.offset != 0) return;
 
-    const response = await fetchGifs(state.settings.firstBatchCount, 0)
+    const response = await fetchGifs(state.settings.firstFetchCount, 0)
     if (!response) return;
 
     const { count, items } = response
@@ -43,7 +43,7 @@ export const actions: ActionTree<State, State> & Actions = {
 
     commit(MutationType.setGifs, gifs)
     commit(MutationType.setGifsCount, count)
-    commit(MutationType.setGifsOffset, state.settings.firstBatchCount)
+    commit(MutationType.setGifsOffset, state.settings.firstFetchCount)
   },
   async [ActionTypes.fetchGifs]({ state, commit }) {
     const response = await fetchGifs(state.settings.fetchCount, state.gifs?.offset || 0)
