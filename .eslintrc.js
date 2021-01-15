@@ -3,7 +3,11 @@ module.exports = {
   env: {
     node: true,
   },
+  plugins: [
+    "sonarjs",
+  ],
   extends: [
+    "plugin:sonarjs/recommended",
     'plugin:vue/vue3-recommended',
     // '@vue/airbnb',
     '@vue/typescript/recommended',
