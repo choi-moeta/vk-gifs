@@ -2,7 +2,7 @@
 
 ## Link / Ссылка
 
-https://vk-gifs.moeta.moe/gallery
+https://vk-gifs.moeta.moe/
 
 I want to keep the repo clean (don't want the dist folder here), so I deployed it on vercel. I used my own domain because vk blocks redirect to `*.vercel.app` for some reason.
 
